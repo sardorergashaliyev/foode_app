@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foody/pages/sign_in.dart';
+import 'package:foody/Auth/SingIn/sign_in.dart';
 
 class OnBoarding extends StatelessWidget {
   const OnBoarding({super.key});

@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foody/pages/payment_method.dart';
-import 'package:intl/intl.dart';
+import 'package:foody/Auth/SingUp/payment_method.dart';
 
-class FiilingPage extends StatefulWidget {
-  const FiilingPage({super.key});
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class FillingPage extends StatefulWidget {
+  const FillingPage({super.key});
 
   @override
-  State<FiilingPage> createState() => _FiilingPageState();
+  State<FillingPage> createState() => _FillingPageState();
 }
 
-class _FiilingPageState extends State<FiilingPage> {
+class _FillingPageState extends State<FillingPage> {
   TextEditingController data = TextEditingController();
 
   Object dropdownvalue = 'Male';
@@ -18,6 +20,26 @@ class _FiilingPageState extends State<FiilingPage> {
   var item = ['Male', 'Femail'];
 
   var date = '';
+
+  Map<String, TextEditingController> controllers = {
+    "fullName": TextEditingController(),
+    "nickName": TextEditingController(),
+    "phoneNumber": TextEditingController(),
+    "gender": TextEditingController(),
+    "dateOfBirth": TextEditingController(),
+    "address": TextEditingController(),
+  };
+
+  Map<String, bool> bools = {
+    "fullName": false,
+    "nickName": false,
+    "phoneNumber": false,
+    "gender": false,
+    "dateOfBirth": false,
+    "address": false,
+  };
+
+  bool isActive = false;
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +97,7 @@ class _FiilingPageState extends State<FiilingPage> {
                 children: [
                   SizedBox(width: 48),
                   Text(
-                    'Full Name',
+                    'Name',
                     style: TextStyle(
                       color: Color(0xff2C3A4B),
                       fontSize: 16,
@@ -96,6 +118,11 @@ class _FiilingPageState extends State<FiilingPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: TextFormField(
+                  controller: controllers['fullName'],
+                  onChanged: (value) {
+                    bools['fullName'] = false;
+                    setState(() {});
+                  },
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Color(0xffFFFFFF),
@@ -118,6 +145,9 @@ class _FiilingPageState extends State<FiilingPage> {
                   ),
                 ),
               ),
+              bools['fullName'] == true
+                  ? Text('Ismni yozing')
+                  : SizedBox.shrink(),
               20.verticalSpace,
               //nick name
               Row(
@@ -145,6 +175,12 @@ class _FiilingPageState extends State<FiilingPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: TextFormField(
+                  controller: controllers['nickName'],
+                  onChanged: (value) {
+                    setState(() {});
+
+                    bools['nickName'] = false;
+                  },
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Color(0xffFFFFFF),
@@ -167,6 +203,9 @@ class _FiilingPageState extends State<FiilingPage> {
                   ),
                 ),
               ),
+              bools['nickName'] == true
+                  ? Text('Nick name yozing')
+                  : SizedBox.shrink(),
               20.verticalSpace,
               // phone number
               Row(
@@ -194,6 +233,11 @@ class _FiilingPageState extends State<FiilingPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: TextFormField(
+                  controller: controllers['phoneNumber'],
+                  onChanged: (value) {
+                    bools['phoneNumber'] = false;
+                    setState(() {});
+                  },
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     filled: true,
@@ -217,6 +261,9 @@ class _FiilingPageState extends State<FiilingPage> {
                   ),
                 ),
               ),
+              bools['phoneNumber'] == true
+                  ? Text('Telefon raqam yozing')
+                  : SizedBox.shrink(),
               20.verticalSpace,
               //gender
               Row(
@@ -244,6 +291,7 @@ class _FiilingPageState extends State<FiilingPage> {
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: DropdownButtonFormField(
+                    hint: Text('Choose'),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
@@ -273,8 +321,14 @@ class _FiilingPageState extends State<FiilingPage> {
                         .toList(),
                     onChanged: (Object? value) {
                       dropdownvalue = value ?? '';
+                      controllers['gender']?.text = value.toString() ?? '';
+                      bools['gender'] = false;
+                      setState(() {});
                     },
                   )),
+              bools['gender'] == true
+                  ? Text('Jinsizni tanlang')
+                  : SizedBox.shrink(),
               20.verticalSpace,
               // date of birth
               Row(
@@ -302,19 +356,25 @@ class _FiilingPageState extends State<FiilingPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: TextFormField(
-                  controller: data,
+                  controller: controllers['dateOfBirth'],
+                  onChanged: (value) {
+                    bools['dateOfBirth'] = false;
+                    setState(() {});
+                  },
                   readOnly: true,
                   onTap: () {
                     showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
+                        initialDate:
+                            DateTime.now().subtract(Duration(days: 365 * 2)),
                         firstDate: DateTime(1950),
-                        lastDate: DateTime.now().add(
+                        lastDate: DateTime.now().subtract(
                           Duration(days: 365 * 2),
                         )).then(
                       (value) {
-                        data.text = DateFormat('MMMM dd, yyyy')
-                            .format(value ?? DateTime.now());
+                        controllers['dateOfBirth']?.text =
+                            DateFormat('MMMM dd, yyyy')
+                                .format(value ?? DateTime.now());
                         setState(() {});
                       },
                     );
@@ -325,7 +385,7 @@ class _FiilingPageState extends State<FiilingPage> {
                     suffixIcon: Icon(Icons.calendar_month),
                     filled: true,
 
-                    hintText: data.text,
+                    hintText: 'Date of birthday',
                     fillColor: Color(0xffFFFFFF),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
@@ -346,6 +406,9 @@ class _FiilingPageState extends State<FiilingPage> {
                   ),
                 ),
               ),
+              bools['dateOfBirth'] == true
+                  ? Text('Tugulgan kuningizni kiriting')
+                  : SizedBox.shrink(),
               20.verticalSpace,
               // address
               Row(
@@ -373,6 +436,11 @@ class _FiilingPageState extends State<FiilingPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: TextFormField(
+                  controller: controllers['address'],
+                  onChanged: (value) {
+                    bools['address'] = false;
+                    setState(() {});
+                  },
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Color(0xffFFFFFF),
@@ -395,14 +463,38 @@ class _FiilingPageState extends State<FiilingPage> {
                   ),
                 ),
               ),
+              bools['address'] == true
+                  ? Text('Manzilingizni yozing')
+                  : SizedBox.shrink(),
               20.verticalSpace,
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (a) => PaymentPage(),
-                    ),
-                  );
+              InkWell(
+                onTap: () async {
+                  if (!controllers.values
+                      .map((e) => e.text.isNotEmpty)
+                      .contains(false)) {
+                    print('object');
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (a) => PaymentPage(),
+                      ),
+                    );
+                    SharedPreferences _store =
+                        await SharedPreferences.getInstance();
+                    _store.setString("name", controllers['fullName']!.text);
+                  } else if (controllers['fullName']!.text.isEmpty) {
+                    bools['fullName'] = true;
+                  } else if (controllers['nickName']!.text.isEmpty) {
+                    bools['nickName'] = true;
+                  } else if (controllers['phoneNumber']!.text.isEmpty) {
+                    bools['phoneNumber'] = true;
+                  } else if (controllers['gender']!.text.isEmpty) {
+                    bools['gender'] = true;
+                  } else if (controllers['dateOfBirth']!.text.isEmpty) {
+                    bools['dateOfBirth'] = true;
+                  } else if (controllers['address']!.text.isEmpty) {
+                    bools['address'] = true;
+                  }
+                  setState(() {});
                 },
                 child: Container(
                   height: 50,
@@ -411,10 +503,17 @@ class _FiilingPageState extends State<FiilingPage> {
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [
-                        Color(0xffFF7E95),
-                        Color(0xffFF1843),
-                      ],
+                      colors: !controllers.values
+                              .map((e) => e.text.isNotEmpty)
+                              .contains(false)
+                          ? [
+                              Color(0xffFF7E95),
+                              Color(0xffFF1843),
+                            ]
+                          : [
+                              Color(0xffFF7E95).withOpacity(0.5),
+                              Color(0xffFF7E95).withOpacity(0.5),
+                            ],
                     ),
                     borderRadius: BorderRadius.all(
                       Radius.circular(32),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foody/pages/splash_screen.dart';
+import 'package:foody/Auth/Splash/splash_screen.dart';
 
 void main(List<String> args) {
   runApp(MyMainPage());

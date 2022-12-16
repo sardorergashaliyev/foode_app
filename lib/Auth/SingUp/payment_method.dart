@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foody/pages/camera_gallery.dart';
-import 'package:foody/pages/cardmodel.dart';
+import 'package:foody/Auth/SingUp/camera_gallery.dart';
+import 'package:foody/pages/model/cardmodel.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key});
@@ -113,7 +113,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 if (index_new != -1) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (a) => CameraGallery(),
+                      builder: (a) => UploadPhotoPage(),
                     ),
                   );
                 }

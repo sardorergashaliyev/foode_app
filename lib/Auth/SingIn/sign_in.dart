@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foody/pages/filling_page.dart';
+import 'package:foody/Auth/SingUp/filling_page.dart';
+import 'package:foody/pages/home/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -18,9 +20,6 @@ class _SignInState extends State<SignIn> {
   bool isRemembered = false;
   bool isHide = false;
   bool isDone = false;
-
-  String email_ = 'test@gmail.com';
-  String password_ = 'string123';
 
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -230,21 +229,15 @@ class _SignInState extends State<SignIn> {
               ),
               SizedBox(height: 20),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   if (email.text.isNotEmpty && password.text.isNotEmpty) {
+                    isDone = true;
                     if (email.text != email) {
                       // isEmailInCorrect = true;
                       // setState(() {});
                     }
                     if (password.text.length <= 8) {
                       isPasswordValidate = true;
-                      setState(() {});
-                    } else if (password == password_) {
-                      isPasswordInCorrect = true;
-                      setState(() {});
-                    }
-                    if (password.text == password_ && email.text == email_) {
-                      isDone = true;
                       setState(() {});
                     }
                   } else if (email.text.isEmpty) {
@@ -254,11 +247,15 @@ class _SignInState extends State<SignIn> {
                     isPasswordEmpty = true;
                   }
                   if (isDone) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (a) => FiilingPage(),
-                      ),
-                    );
+                    if (email.text.isNotEmpty && password.text.isNotEmpty) {
+                      isDone = true;
+                      
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (a) => HomePage(),
+                        ),
+                      );
+                    }
                   }
                 },
                 child: Container(
@@ -381,17 +378,26 @@ class _SignInState extends State<SignIn> {
                     ),
                   ),
                   SizedBox(width: 8),
-                  Text(
-                    'Sign up',
-                    style: TextStyle(
-                      color: Color(0xffF43F5E),
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (a) => FillingPage(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Sign up',
+                      style: TextStyle(
+                        color: Color(0xffF43F5E),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 32),  
+              SizedBox(height: 32),
             ],
           ),
         ),
