@@ -321,7 +321,7 @@ class _FillingPageState extends State<FillingPage> {
                         .toList(),
                     onChanged: (Object? value) {
                       dropdownvalue = value ?? '';
-                      controllers['gender']?.text = value.toString() ?? '';
+                      controllers['gender']?.text = value.toString();
                       bools['gender'] = false;
                       setState(() {});
                     },
