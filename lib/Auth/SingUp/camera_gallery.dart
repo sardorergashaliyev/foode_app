@@ -93,7 +93,7 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
                                     CroppedFile? cropperImage =
                                         await ImageCropper()
                                             .cropImage(sourcePath: value.path);
-                                    imagePath = cropperImage?.path ?? '';
+                                    imagePath = cropperImage!.path ;
                                     setState(() {});
                                   }
                                 });
@@ -146,7 +146,7 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
                                     CroppedFile? cropperImage =
                                         await ImageCropper()
                                             .cropImage(sourcePath: value.path);
-                                    imagePath = cropperImage?.path ?? '';
+                                    imagePath = cropperImage!.path;
                                     setState(() {});
                                   }
                                 });
